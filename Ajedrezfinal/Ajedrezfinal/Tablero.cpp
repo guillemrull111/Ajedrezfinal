@@ -2,19 +2,7 @@
 #include "Const.h"
 
 void InicializarTablero(char tablero[FILA][COLUMNA]) {
-<<<<<<< HEAD
-	int numero = 0;
-	for (int i = 0; i < COLUMNA; i++)
-	{
-		std::cout << numero << ' ';
-		numero++;
-		
-	}
-	std::cout << std::endl;
-=======
-	
-	
->>>>>>> dbfe766f3ae325ad6424068bbef3ba30b1c89aaa
+
 	for (int i = 0; i < FILA; i++)
 	{
 		for (int j = 0; j < COLUMNA; j++)
@@ -46,22 +34,30 @@ void posicionFichas(char tablero[FILA][COLUMNA]) {
 }
 
 void ImprimirTablero(char tablero[FILA][COLUMNA]) {
-<<<<<<< HEAD
-	for (int i = 0; i < FILA; i++) {
-		for (int j = 0; j < COLUMNA; j++) {
-=======
+
 	std::cout << "  ";
+
 	for (int j = 0; j < COLUMNA; ++j) {
-		std::cout << j +1<< ' ';
+
+		std::cout << j + 1 << ' ';
+
 	}
+
 	std::cout << std::endl;
+
 	for (int i = 0; i < FILA; ++i) {
-		std::cout << FILA -i << ' ';
+
+		std::cout << FILA - i << ' ';
+
 		for (int j = 0; j < COLUMNA; ++j) {
->>>>>>> dbfe766f3ae325ad6424068bbef3ba30b1c89aaa
+
 			std::cout << tablero[i][j] << ' ';
+
 		}
+
 		std::cout << std::endl;
+
 	}
+
 }
 
