@@ -2,7 +2,13 @@
 #include "Const.h"
 
 void InicializarTablero(char tablero[FILA][COLUMNA]) {
-
+	int numero = 0;
+	for (int i = 0; i < COLUMNA; i++)
+	{
+		std::cout << numero << ' ';
+		numero++;
+	}
+	std::cout << std::endl;
 	for (int i = 0; i < FILA; i++)
 	{
 		for (int j = 0; j < COLUMNA; j++)
