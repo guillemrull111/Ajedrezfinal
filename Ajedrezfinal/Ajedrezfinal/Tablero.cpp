@@ -7,6 +7,7 @@ void InicializarTablero(char tablero[FILA][COLUMNA]) {
 	{
 		std::cout << numero << ' ';
 		numero++;
+		
 	}
 	std::cout << std::endl;
 	for (int i = 0; i < FILA; i++)
