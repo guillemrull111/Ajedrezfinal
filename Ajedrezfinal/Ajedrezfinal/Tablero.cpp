@@ -7,7 +7,7 @@ void InicializarTablero(char tablero[FILA][COLUMNA]) {
 	{
 		for (int j = 0; j < COLUMNA; j++)
 		{
-			tablero[i][j] = ' ';
+			tablero[i][j] = '*';
 		}
 
 	}
@@ -15,5 +15,5 @@ void InicializarTablero(char tablero[FILA][COLUMNA]) {
 
 void ImprimirTablero(char tablero[FILA][COLUMNA]) {
 
-
+	std::cout << tablero[FILA][COLUMNA];
 }
