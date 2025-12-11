@@ -14,8 +14,8 @@ void InicializarTablero(char tablero[FILA][COLUMNA]) {
 }
 
 void ImprimirTablero(char tablero[FILA][COLUMNA]) {
-	for (int i = 0; i < FILA; ++i) {
-		for (int j = 0; j < COLUMNA; ++j) {
+	for (int i = 0; i < FILA; i++) {
+		for (int j = 0; j < COLUMNA; j++) {
 			std::cout << tablero[i][j] << ' ';
 		}
 		std::cout << '\n';
