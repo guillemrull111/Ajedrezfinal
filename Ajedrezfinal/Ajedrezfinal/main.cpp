@@ -9,5 +9,6 @@ int main() {
 	InicializarTablero(tablero);
 	ImprimirTablero(tablero);
 
+
 	return 0;
 }

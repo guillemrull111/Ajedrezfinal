@@ -21,3 +21,4 @@ void ImprimirTablero(char tablero[FILA][COLUMNA]) {
 		std::cout << '\n';
 	}
 }
+
