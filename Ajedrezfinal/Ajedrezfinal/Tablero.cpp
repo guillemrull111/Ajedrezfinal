@@ -45,11 +45,11 @@ void ImprimirTablero(char tablero[FILA][COLUMNA]) {
 
 	std::cout << std::endl;
 
-	for (int i = 0; i < FILA; ++i) {
+	for (int i = 0; i < FILA; i++) {
 
 		std::cout << FILA - i << ' ';
 
-		for (int j = 0; j < COLUMNA; ++j) {
+		for (int j = 0; j < COLUMNA; j++) {
 
 			std::cout << tablero[i][j] << ' ';
 
