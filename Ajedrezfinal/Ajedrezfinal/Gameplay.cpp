@@ -24,6 +24,8 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
 			{
 
 			}
+
+			turno == true;
 		}
 	}
 	
