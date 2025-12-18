@@ -25,7 +25,7 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
 				std::cout << "Columna destino: ";
 				std::cin >> colDestino;
 
-				// Mover ficha
+				
 				tablero[filaOrigen][colOrigen] = '*';
 				tablero[filaDestino][colDestino] = 'p';
 
@@ -52,7 +52,7 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
 				std::cout << "Columna destino: ";
 				std::cin >> colDestino;
 
-				// Mover ficha
+		
 				tablero[filaOrigen][colOrigen] = '*';
 				tablero[filaDestino][colDestino] = 'p';
 
