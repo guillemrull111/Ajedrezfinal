@@ -1,6 +1,8 @@
 #include <iostream>
 #include "Const.h"
 #include "Tablero.h"
+#include "Gameplay.h"
+
 
 int main() {
 
@@ -9,6 +11,7 @@ int main() {
 	InicializarTablero(tablero);
 	posicionFichas(tablero);
 	ImprimirTablero(tablero);
+	MovimientoFichas(tablero);
 
 	return 0;
 }
