@@ -11,6 +11,8 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
 
     while (!juegoAcabado) {
 
+        std::cout << "\n(0 0 para salir)\n";
+
         char fichaTurno = (turno == false) ? 'p' : 'P';
 
         std::cout << "\nTurno de las fichas: " << fichaTurno << "\n";
