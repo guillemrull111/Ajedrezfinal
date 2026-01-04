@@ -218,9 +218,98 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
                 }
             }
 
+            // REY 
+            if (ficha == 'K' || ficha == 'k') {
 
+                if ((diferenciaFila == 1 || diferenciaFila == 0 || diferenciaFila == -1) &&
+                    (diferenciaColumna == 1 || diferenciaColumna == 0 || diferenciaColumna == -1) &&
+                    !(diferenciaFila == 0 && diferenciaColumna == 0)) {
 
+                    bool puedeCapturar = false;
 
+                    if (turno) { // Mayúsculas
+                        if (destino == 'p' || destino == 't' || destino == 'h' ||
+                            destino == 'b' || destino == 'q' || destino == 'k') {
+                            puedeCapturar = true;
+                        }
+                    }
+                    else { // Minúsculas
+                        if (destino == 'P' || destino == 'T' || destino == 'H' ||
+                            destino == 'B' || destino == 'Q' || destino == 'K') {
+                            puedeCapturar = true;
+                        }
+                    }
+
+                    if (destino == '*' || puedeCapturar) {
+                        movimientoValido = true;
+                    }
+                }
+            }
+
+            // REINA
+            if (ficha == 'Q' || ficha == 'q') {
+
+                bool rutaLibre = true;
+                bool puedeCapturar = false;
+                bool movimientoValidoReina = false;
+
+                int pasoFila = 0;
+                int pasoColumna = 0;
+                int filaActual;
+                int columnaActual;
+
+                // Verificar que el movimiento sea horizontal, vertical o diagonal
+                if (diferenciaFila == 0 || diferenciaColumna == 0) {
+                    movimientoValidoReina = true;   // movimiento tipo torre
+                }
+                else if (diferenciaFila == diferenciaColumna || diferenciaFila == -diferenciaColumna) {
+                    movimientoValidoReina = true;   // movimiento tipo alfil
+                }
+
+                if (!movimientoValidoReina) {
+                    rutaLibre = false;
+                }
+                else {
+                    // Dirección de movimiento
+                    if (diferenciaFila > 0) pasoFila = 1;
+                    else if (diferenciaFila < 0) pasoFila = -1;
+
+                    if (diferenciaColumna > 0) pasoColumna = 1;
+                    else if (diferenciaColumna < 0) pasoColumna = -1;
+
+                    // Recorrer la ruta hasta la casilla destino (sin incluirla)
+                    filaActual = filaOrigen + pasoFila;
+                    columnaActual = colOrigen + pasoColumna;
+
+                    while (filaActual != filaDestino || columnaActual != colDestino) {
+                        if (tablero[filaActual][columnaActual] != '*') {
+                            rutaLibre = false;
+                            break;
+                        }
+                        filaActual += pasoFila;
+                        columnaActual += pasoColumna;
+                    }
+                }
+
+                // Verificar si puede capturar
+                if (turno) { // Mayúsculas comen minúsculas
+                    if (destino == 'p' || destino == 't' || destino == 'h' ||
+                        destino == 'b' || destino == 'q' || destino == 'k') {
+                        puedeCapturar = true;
+                    }
+                }
+                else { // Minúsculas comen mayúsculas
+                    if (destino == 'P' || destino == 'T' || destino == 'H' ||
+                        destino == 'B' || destino == 'Q' || destino == 'K') {
+                        puedeCapturar = true;
+                    }
+                }
+
+                // Movimiento final válido
+                if (rutaLibre && (destino == '*' || puedeCapturar)) {
+                    movimientoValido = true;
+                }
+            }
 
             if (movimientoValido) {
                 tablero[filaDestino][colDestino] = ficha;
