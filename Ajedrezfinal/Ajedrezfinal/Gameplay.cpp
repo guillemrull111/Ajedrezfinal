@@ -134,6 +134,94 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
                 }
             }
 
+            // ALFIL: movimiento diagonal, ruta libre
+            if (ficha == 'B' || ficha == 'b') {
+                bool caminoLibre = true;
+
+                // Debe ser movimiento diagonal: |difFila| == |difCol|
+                int valorDifFila = diferenciaFila;
+                if (valorDifFila < 0) valorDifFila = -valorDifFila;
+                int valorDifColumna = diferenciaColumna;
+                if (valorDifColumna < 0) valorDifColumna = -valorDifColumna;
+
+                if (valorDifFila != valorDifColumna) {
+                    caminoLibre = false;
+                }
+                else {
+                    int pasoFila = 0;
+                    int pasoColumna = 0;
+
+                    // Dirección de la diagonal
+                    if (diferenciaFila > 0) pasoFila = 1;
+                    if (diferenciaFila < 0) pasoFila = -1;
+                    if (diferenciaColumna > 0) pasoColumna = 1;
+                    if (diferenciaColumna < 0) pasoColumna = -1;
+
+                    int filaActual = filaOrigen + pasoFila;
+                    int colActual = colOrigen + pasoColumna;
+
+                    // Mirar casillas intermedias
+                    while (filaActual != filaDestino || colActual != colDestino) {
+                        if (tablero[filaActual][colActual] != '*') {
+                            caminoLibre = false;
+                            break;
+                        }
+                        filaActual += pasoFila;
+                        colActual += pasoColumna;
+                    }
+                }
+
+                bool puedeComer = false;
+                // Mayúsculas comen minúsculas
+                if (turno && (destino == 'p' || destino == 't' || destino == 'h' ||
+                    destino == 'b' || destino == 'q' || destino == 'k')) {
+                    puedeComer = true;
+                }
+                // Minúsculas comen mayúsculas
+                if (!turno && (destino == 'P' || destino == 'T' || destino == 'H' ||
+                    destino == 'B' || destino == 'Q' || destino == 'K')) {
+                    puedeComer = true;
+                }
+
+                if (caminoLibre && (destino == '*' || puedeComer)) {
+                    movimientoValido = true;
+                }
+            }
+
+            // CABALLO: L forma, salta piezas
+            if (ficha == 'H' || ficha == 'h') {
+                int distanciaFila = diferenciaFila;
+                if (distanciaFila < 0) distanciaFila = -distanciaFila;
+                int distanciaColumna = diferenciaColumna;
+                if (distanciaColumna < 0) distanciaColumna = -distanciaColumna;
+
+                bool formaCaballo = false;
+                // Exactamente L: 2+1 o 1+2
+                if ((distanciaFila == 2 && distanciaColumna == 1) || (distanciaFila == 1 && distanciaColumna == 2)) {
+                    formaCaballo = true;
+                }
+
+                bool puedeComer = false;
+                // Mayús comen minús
+                if (turno && (destino == 'p' || destino == 't' || destino == 'h' ||
+                    destino == 'b' || destino == 'q' || destino == 'k')) {
+                    puedeComer = true;
+                }
+                // Minús comen mayús
+                if (!turno && (destino == 'P' || destino == 'T' || destino == 'H' ||
+                    destino == 'B' || destino == 'Q' || destino == 'K')) {
+                    puedeComer = true;
+                }
+
+                if (formaCaballo && (destino == '*' || puedeComer)) {
+                    movimientoValido = true;
+                }
+            }
+
+
+
+
+
             if (movimientoValido) {
                 tablero[filaDestino][colDestino] = ficha;
                 tablero[filaOrigen][colOrigen] = '*';
