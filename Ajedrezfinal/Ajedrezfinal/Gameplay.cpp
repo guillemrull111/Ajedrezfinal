@@ -7,7 +7,7 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
     int filaOrigen, colOrigen;
     int filaDestino, colDestino;
     bool juegoAcabado = false;
-    bool turno = true;  // true = mayúsculas arriba
+    bool turno = true;  
 
     while (!juegoAcabado) {
         std::cout << "\n(0 0 para salir)\n";
@@ -36,14 +36,14 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
 
         char ficha = tablero[filaOrigen][colOrigen];
 
-        // CHEQUEO SIMPLE: turno arriba busca P/T/H/B/Q/K, abajo p/t/h/b/q/k
+        // Turno arriba mayusculas y abajo minusculas
         bool esMiFicha = false;
-        if (turno) {  // MAYÚSCULAS
+        if (turno) {  
             if (ficha == 'P' || ficha == 'T' || ficha == 'H' || ficha == 'B' || ficha == 'Q' || ficha == 'K') {
                 esMiFicha = true;
             }
         }
-        else {  // minúsculas
+        else {  
             if (ficha == 'p' || ficha == 't' || ficha == 'h' || ficha == 'b' || ficha == 'q' || ficha == 'k') {
                 esMiFicha = true;
             }
@@ -76,18 +76,18 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
             // PEÓN
             if (ficha == 'P' || ficha == 'p') {
                 if (diferenciaFila == direccionPeon && diferenciaColumna == 0 && destino == '*') {
-                    movimientoValido = true;  // 1 casilla
+                    movimientoValido = true;  // Moverse una casilla
                 }
                 if (inicio && diferenciaFila == direccionPeon * 2 && diferenciaColumna == 0 &&
                     tablero[filaOrigen + direccionPeon][colOrigen] == '*' && destino == '*') {
-                    movimientoValido = true;  // 2 casillas inicio
+                    movimientoValido = true;  // Moverse 2 casillas, solo funciona cuando esta en la posicion inicial
                 }
                 if (diferenciaFila == direccionPeon && (diferenciaColumna == 1 || diferenciaColumna == -1)) {
                     if (turno && (destino == 'p' || destino == 't' || destino == 'h' || destino == 'b' || destino == 'q' || destino == 'k')) {
-                        movimientoValido = true;  // Captura abajo
+                        movimientoValido = true;  // Matar (fichas de abajo)
                     }
                     if (!turno && (destino == 'P' || destino == 'T' || destino == 'H' || destino == 'B' || destino == 'Q' || destino == 'K')) {
-                        movimientoValido = true;  // Captura arriba
+                        movimientoValido = true;  // Matar (fichas de arriba)
                     }
                 }
             }
@@ -96,7 +96,7 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
             if (ficha == 'T' || ficha == 't') {
                 bool rutaLibre = true;
                 if (!(diferenciaFila == 0 || diferenciaColumna == 0)) {
-                    rutaLibre = false;  // Solo H/V
+                    rutaLibre = false;  
                 }
                 else {
                     int pasoFila = 0, pasoColumna = 0;
@@ -118,12 +118,12 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
                 }
 
                 bool puedeCapturar = false;
-                if (turno) {  // Mayús capturan minús
+                if (turno) {  // Mayúsculas capturan minúsculas
                     if (destino == 'p' || destino == 't' || destino == 'h' || destino == 'b' || destino == 'q' || destino == 'k') {
                         puedeCapturar = true;
                     }
                 }
-                else {  // minús capturan mayús
+                else {  // Minúsculas capturan mayúsculas
                     if (destino == 'P' || destino == 'T' || destino == 'H' || destino == 'B' || destino == 'Q' || destino == 'K') {
                         puedeCapturar = true;
                     }
@@ -134,15 +134,15 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
                 }
             }
 
-            // ALFIL: movimiento diagonal, ruta libre
+            // ALFIL
             if (ficha == 'B' || ficha == 'b') {
                 bool caminoLibre = true;
 
                 // Debe ser movimiento diagonal: |difFila| == |difCol|
                 int valorDifFila = diferenciaFila;
-                if (valorDifFila < 0) valorDifFila = -valorDifFila;
+                if (valorDifFila < 0) valorDifFila = - valorDifFila;
                 int valorDifColumna = diferenciaColumna;
-                if (valorDifColumna < 0) valorDifColumna = -valorDifColumna;
+                if (valorDifColumna < 0) valorDifColumna = - valorDifColumna;
 
                 if (valorDifFila != valorDifColumna) {
                     caminoLibre = false;
@@ -160,7 +160,7 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
                     int filaActual = filaOrigen + pasoFila;
                     int colActual = colOrigen + pasoColumna;
 
-                    // Mirar casillas intermedias
+                    // Mirar casillas de entre medio
                     while (filaActual != filaDestino || colActual != colDestino) {
                         if (tablero[filaActual][colActual] != '*') {
                             caminoLibre = false;
@@ -172,12 +172,12 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
                 }
 
                 bool puedeComer = false;
-                // Mayúsculas comen minúsculas
+                // Mayúsculas matan a minúsculas
                 if (turno && (destino == 'p' || destino == 't' || destino == 'h' ||
                     destino == 'b' || destino == 'q' || destino == 'k')) {
                     puedeComer = true;
                 }
-                // Minúsculas comen mayúsculas
+                // Minúsculas matan a mayúsculas
                 if (!turno && (destino == 'P' || destino == 'T' || destino == 'H' ||
                     destino == 'B' || destino == 'Q' || destino == 'K')) {
                     puedeComer = true;
@@ -188,7 +188,7 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
                 }
             }
 
-            // CABALLO: L forma, salta piezas
+            // CABALLO
             if (ficha == 'H' || ficha == 'h') {
                 int distanciaFila = diferenciaFila;
                 if (distanciaFila < 0) distanciaFila = -distanciaFila;
@@ -196,18 +196,18 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
                 if (distanciaColumna < 0) distanciaColumna = -distanciaColumna;
 
                 bool formaCaballo = false;
-                // Exactamente L: 2+1 o 1+2
+                // Tiene que hacer el movimiento de L: 2+1 o 1+2
                 if ((distanciaFila == 2 && distanciaColumna == 1) || (distanciaFila == 1 && distanciaColumna == 2)) {
                     formaCaballo = true;
                 }
 
                 bool puedeComer = false;
-                // Mayús comen minús
+                // Mayús matan a minús
                 if (turno && (destino == 'p' || destino == 't' || destino == 'h' ||
                     destino == 'b' || destino == 'q' || destino == 'k')) {
                     puedeComer = true;
                 }
-                // Minús comen mayús
+                // Minús matan a mayús
                 if (!turno && (destino == 'P' || destino == 'T' || destino == 'H' ||
                     destino == 'B' || destino == 'Q' || destino == 'K')) {
                     puedeComer = true;
@@ -258,7 +258,7 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
                 int filaActual;
                 int columnaActual;
 
-                // Verificar que el movimiento sea horizontal, vertical o diagonal
+                // Para mirar que el movimiento sea horizontal, vertical o en diagonal
                 if (diferenciaFila == 0 || diferenciaColumna == 0) {
                     movimientoValidoReina = true;   // movimiento tipo torre
                 }
@@ -291,7 +291,7 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
                     }
                 }
 
-                // Verificar si puede capturar
+                // Mirar si puede capturar
                 if (turno) { // Mayúsculas comen minúsculas
                     if (destino == 'p' || destino == 't' || destino == 'h' ||
                         destino == 'b' || destino == 'q' || destino == 'k') {
