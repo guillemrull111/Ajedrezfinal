@@ -11,7 +11,7 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
 
     while (!juegoAcabado) {
         std::cout << "\n(0 0 para salir)\n";
-        std::cout << "\nTurno: " << (turno ? "MAYÚSCULAS (arriba)" : "minúsculas (abajo)") << "\n";
+        std::cout << "\nTurno: " << (turno ? "MAYUSCULAS (arriba)" : "minusculas (abajo)") << "\n";
 
         std::cout << "Fila origen (1-8): ";
         std::cin >> filaOrigen;
@@ -84,10 +84,10 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
                 }
                 if (diferenciaFila == direccionPeon && (diferenciaColumna == 1 || diferenciaColumna == -1)) {
                     if (turno && (destino == 'p' || destino == 't' || destino == 'h' || destino == 'b' || destino == 'q' || destino == 'k')) {
-                        movimientoValido = true;  // Matar (fichas de abajo)
+                        movimientoValido = true;  // Matar a las fichas de abajo 
                     }
                     if (!turno && (destino == 'P' || destino == 'T' || destino == 'H' || destino == 'B' || destino == 'Q' || destino == 'K')) {
-                        movimientoValido = true;  // Matar (fichas de arriba)
+                        movimientoValido = true;  // Matar a las fichas de arriba
                     }
                 }
             }
@@ -202,12 +202,12 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
                 }
 
                 bool puedeComer = false;
-                // Mayús matan a minús
+                // Mayúsculas matan a minús
                 if (turno && (destino == 'p' || destino == 't' || destino == 'h' ||
                     destino == 'b' || destino == 'q' || destino == 'k')) {
                     puedeComer = true;
                 }
-                // Minús matan a mayús
+                // Minúsculas matan a mayús
                 if (!turno && (destino == 'P' || destino == 'T' || destino == 'H' ||
                     destino == 'B' || destino == 'Q' || destino == 'K')) {
                     puedeComer = true;
@@ -227,13 +227,13 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
 
                     bool puedeCapturar = false;
 
-                    if (turno) { // Mayúsculas
+                    if (turno) { // Para matar a las minusculas
                         if (destino == 'p' || destino == 't' || destino == 'h' ||
                             destino == 'b' || destino == 'q' || destino == 'k') {
                             puedeCapturar = true;
                         }
                     }
-                    else { // Minúsculas
+                    else { // Para matar a las mayusculas
                         if (destino == 'P' || destino == 'T' || destino == 'H' ||
                             destino == 'B' || destino == 'Q' || destino == 'K') {
                             puedeCapturar = true;
@@ -250,7 +250,7 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
             if (ficha == 'Q' || ficha == 'q') {
 
                 bool rutaLibre = true;
-                bool puedeCapturar = false;
+                bool puedeMatar = false;
                 bool movimientoValidoReina = false;
 
                 int pasoFila = 0;
@@ -291,22 +291,22 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
                     }
                 }
 
-                // Mirar si puede capturar
-                if (turno) { // Mayúsculas comen minúsculas
+                // Mirar si puede matar
+                if (turno) { // Mayúsculas matan minúsculas
                     if (destino == 'p' || destino == 't' || destino == 'h' ||
                         destino == 'b' || destino == 'q' || destino == 'k') {
-                        puedeCapturar = true;
+                        puedeMatar = true;
                     }
                 }
-                else { // Minúsculas comen mayúsculas
+                else { // Minúsculas matan mayúsculas
                     if (destino == 'P' || destino == 'T' || destino == 'H' ||
                         destino == 'B' || destino == 'Q' || destino == 'K') {
-                        puedeCapturar = true;
+                        puedeMatar = true;
                     }
                 }
 
                 // Movimiento final válido
-                if (rutaLibre && (destino == '*' || puedeCapturar)) {
+                if (rutaLibre && (destino == '*' || puedeMatar)) {
                     movimientoValido = true;
                 }
             }
