@@ -109,6 +109,14 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
             if (movimientoValido) {
                 tablero[filaDestino][colDestino] = ficha;
                 tablero[filaOrigen][colOrigen] = '*';
+
+                if (ficha == 'P' && filaDestino == 7) {
+                    tablero[filaDestino][colDestino] = 'Q';   // peón blanco llega arriba
+                }
+                else if (ficha == 'p' && filaDestino == 0) {
+                    tablero[filaDestino][colDestino] = 'q';   // peón negro llega abajo
+                }
+
                 turno = !turno;
                 std::cout << "¡Movimiento correcto!\n";
             }
