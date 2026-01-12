@@ -141,12 +141,12 @@ void MovimientoCaballo(char tablero[FILA][COLUMNA], int filaOrigen, int colOrige
     }
 
     bool puedeComer = false;
-    // Mayúsculas matan a minús
+    // Mayúsculas matan a minúsculas
     if (turno && (destino == 'p' || destino == 't' || destino == 'h' ||
         destino == 'b' || destino == 'q' || destino == 'k')) {
         puedeComer = true;
     }
-    // Minúsculas matan a mayús
+    // Minúsculas matan a mayúsculas
     if (!turno && (destino == 'P' || destino == 'T' || destino == 'H' ||
         destino == 'B' || destino == 'Q' || destino == 'K')) {
         puedeComer = true;
@@ -251,4 +251,5 @@ void MovimientoReina(char tablero[FILA][COLUMNA], int filaOrigen, int colOrigen,
         movimientoValido = true;
     }
 }
+
 
