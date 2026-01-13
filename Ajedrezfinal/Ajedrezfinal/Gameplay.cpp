@@ -3,92 +3,15 @@
 #include "Const.h"
 #include "tablero.h"
 #include "Movimiento.h"
-
-// Buscar el rey en el tablero
-void BuscarRey(char tablero[FILA][COLUMNA], char rey, int& fila, int& col) {
-    for (int i = 0; i < FILA; i++) {
-        for (int j = 0; j < COLUMNA; j++) {
-            if (tablero[i][j] == rey) {
-                fila = i;
-                col = j;
-                return;
-            }
-        }
-    }
-}
-
-// Comprobar si el jugador actual amenaza al rey rival
-bool HayJaque(char tablero[FILA][COLUMNA], bool turnoQueAtaca) {
-
-    int filaRey, colRey;
-    char reyObjetivo;
-
-    // Asignar el rey enemigo según el turno
-    if (turnoQueAtaca) {
-        reyObjetivo = 'k';
-    }
-    else {
-        reyObjetivo = 'K';
-    }
-
-    BuscarRey(tablero, reyObjetivo, filaRey, colRey);
-
-    for (int i = 0; i < FILA; i++) {
-        for (int j = 0; j < COLUMNA; j++) {
-
-            char ficha = tablero[i][j];
-            bool movimientoValido = false;
-
-            // Comprobar si la ficha pertenece al jugador que ataca
-            if (turnoQueAtaca) {
-                if (!(ficha == 'P' || ficha == 'T' || ficha == 'H' ||
-                    ficha == 'B' || ficha == 'Q' || ficha == 'K'))
-                    continue;
-            }
-            else {
-                if (!(ficha == 'p' || ficha == 't' || ficha == 'h' ||
-                    ficha == 'b' || ficha == 'q' || ficha == 'k'))
-                    continue;
-            }
-
-            // Simular ataque al rey usando las funciones de movimiento
-            if (ficha == 'P' || ficha == 'p') {
-                MovimientoPeon(tablero, i, j, filaRey, colRey, turnoQueAtaca, movimientoValido);
-            }
-            else if (ficha == 'T' || ficha == 't') {
-                MovimientoTorre(tablero, i, j, filaRey, colRey, turnoQueAtaca, movimientoValido);
-            }
-            else if (ficha == 'B' || ficha == 'b') {
-                MovimientoAlfil(tablero, i, j, filaRey, colRey, turnoQueAtaca, movimientoValido);
-            }
-            else if (ficha == 'H' || ficha == 'h') {
-                MovimientoCaballo(tablero, i, j, filaRey, colRey, turnoQueAtaca, movimientoValido);
-            }
-            else if (ficha == 'Q' || ficha == 'q') {
-                MovimientoReina(tablero, i, j, filaRey, colRey, turnoQueAtaca, movimientoValido);
-            }
-            else if (ficha == 'K' || ficha == 'k') {
-                MovimientoRey(tablero, i, j, filaRey, colRey, turnoQueAtaca, movimientoValido);
-            }
-
-            if (movimientoValido) {
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-
+#include "Jaque.h"
 
 void MovimientoFichas(char tablero[FILA][COLUMNA]) {
-    int filaOrigen, colOrigen;
-    int filaDestino, colDestino;
-    bool juegoAcabado = false;
-    bool turno = true;  
+    int filaOrigen, colOrigen; // Coordenadas de origen donde esta la pieza que se quiere mover
+    int filaDestino, colDestino; // Coordenadas de destino donde se quiere mover la pieza
+    bool juegoAcabado = false; // Controla si la partida ha terminado
+    bool turno = true;  // true: mayúsculas , false: minúsculas 
 
-    while (!juegoAcabado) {
+    while (!juegoAcabado) {  // Bucle principal del juego
         std::cout << "\n(0 0 para salir)\n";
         std::cout << "\nTurno: " << (turno ? "MAYUSCULAS (arriba)" : "minusculas (abajo)") << "\n";
 
@@ -97,59 +20,59 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
         std::cout << "Columna origen (1-8): ";
         std::cin >> colOrigen;
 
+        // Opción para terminar la partida
         if (filaOrigen == 0 && colOrigen == 0) {
             std::cout << "¡Juego terminado!\n";
             juegoAcabado = true;
-            continue;
+            break; // Salimos del bucle
         }
 
+        // Comprobación de que el origen está dentro del tablero
         if (filaOrigen < 1 || filaOrigen > 8 || colOrigen < 1 || colOrigen > 8) {
             std::cout << "Fuera del tablero\n";
             system("cls");
             ImprimirTablero(tablero);
-            continue;
+            continue; // Pide otra vez coordenadas
         }
 
+        // Conversión de coordenadas
         filaOrigen = 8 - filaOrigen;
         colOrigen = colOrigen - 1;
 
-        char ficha = tablero[filaOrigen][colOrigen];
+        char ficha = tablero[filaOrigen][colOrigen]; // Ficha en la casilla de origen
 
-        // Turno arriba mayusculas y abajo minusculas
+        // Comprobamos si la ficha elegida es del jugador al que le toca tirar
         bool esMiFicha = false;
-        if (turno) {  
+        if (turno) {  // Turno mayúsculas
             if (ficha == 'P' || ficha == 'T' || ficha == 'H' || ficha == 'B' || ficha == 'Q' || ficha == 'K') {
                 esMiFicha = true;
             }
         }
-        else {  
+        else {   // Turno minúsculas
             if (ficha == 'p' || ficha == 't' || ficha == 'h' || ficha == 'b' || ficha == 'q' || ficha == 'k') {
                 esMiFicha = true;
             }
         }
 
-        if (esMiFicha) {
+        if (esMiFicha) { // Solo continuamos si la ficha es del jugador
             std::cout << "Fila destino (1-8): ";
             std::cin >> filaDestino;
             std::cout << "Columna destino (1-8): ";
             std::cin >> colDestino;
 
+            // Comprobar que el destino está dentro del tablero
             if (filaDestino < 1 || filaDestino > 8 || colDestino < 1 || colDestino > 8) {
                 std::cout << "Destino fuera del tablero\n";
                 system("cls");
                 ImprimirTablero(tablero);
-                continue;
+                continue; // Pide otra vez coordenadas
             }
 
+            // Conversión de coordenadas
             filaDestino = 8 - filaDestino;
             colDestino = colDestino - 1;
 
-            char destino = tablero[filaDestino][colDestino];
-            int diferenciaFila = filaDestino - filaOrigen;
-            int diferenciaColumna = colDestino - colOrigen;
-            int direccionPeon = (turno == false) ? -1 : 1;
-            bool inicio = (filaOrigen == (turno ? 1 : 6));
-
+            // Indica si el movimiento es valido
             bool movimientoValido = false;
 
             // PEÓN
@@ -184,33 +107,41 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
 
             }
 
-            if (movimientoValido) {
-                tablero[filaDestino][colDestino] = ficha;
-                tablero[filaOrigen][colOrigen] = '*';
+            if (movimientoValido) { // Si el movimiento es valido
+                tablero[filaDestino][colDestino] = ficha; // Movemos la ficha al destino
+                tablero[filaOrigen][colOrigen] = '*'; // Vaciamps la casilla de origen
 
-                if (ficha == 'P' && filaDestino == 7)
-                    tablero[filaDestino][colDestino] = 'Q';
-                else if (ficha == 'p' && filaDestino == 0)
-                    tablero[filaDestino][colDestino] = 'q';
+                // Conversión de peón a reina
+                if (ficha == 'P' && filaDestino == 7) // Peón blanco llega al final
+                    tablero[filaDestino][colDestino] = 'Q'; // Se convierte en reina blanca
+                else if (ficha == 'p' && filaDestino == 0) // Peón negro llega al final
+                    tablero[filaDestino][colDestino] = 'q'; // Se convierte en reina negra
 
-                if (HayJaque(tablero, turno)) {
-                    std::cout << "Jaque al rey! Estas obligado a mover el rey, sino lo mataran y perderas.\n";
+                bool enJaque, jaqueMate;
+                // Comprobar si el movimiento deja al rival en jaque/jaque mate
+                ComprobarJaqueYMate(tablero, !turno, enJaque, jaqueMate);
+                if (enJaque) {
+                    std::cout << "¡Jaque al rey! Estás obligado a mover el rey.\n";
                     system("pause");
                 }
+                if (jaqueMate) {
+                    std::cout << "¡¡Jaque mate!!\n";
+                    juegoAcabado = true; // Termina la partida
+                }
 
-                turno = !turno;
+                turno = !turno;  // Cambiar turno al otro jugador
                 std::cout << "Movimiento correcto\n";
             }
             else {
-                std::cout << "Movimiento inválido\n";
+                std::cout << "Movimiento inválido\n";  // Movimiento no válido
             }
 
         }
         else {
-            std::cout << "No es tu ficha o posición vacía\n";
+            std::cout << "No es tu ficha o posición vacía\n";  // Intento de mover ficha vacía o del rival
         }
 
-        system("cls");
-        ImprimirTablero(tablero);
+        system("cls"); //Limpia la pantalla
+        ImprimirTablero(tablero); //Muestra el tablero actualizado
     }
 }
