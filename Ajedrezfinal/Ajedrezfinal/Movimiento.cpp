@@ -2,11 +2,11 @@
 
 
 void MovimientoPeon(char tablero[FILA][COLUMNA], int filaOrigen, int colOrigen, int filaDestino, int colDestino, bool turno, bool& movimientoValido) {
-    char destino = tablero[filaDestino][colDestino];
-    int diferenciaFila = filaDestino - filaOrigen;
-    int diferenciaColumna = colDestino - colOrigen;
-    int direccionPeon = (turno == false) ? -1 : 1;
-    bool inicio = (filaOrigen == (turno ? 1 : 6));
+    char destino = tablero[filaDestino][colDestino]; // Contenido de la casilla destino
+    int diferenciaFila = filaDestino - filaOrigen; // Desplazamiento vertical
+    int diferenciaColumna = colDestino - colOrigen; // Desplazamiento horizontal
+    int direccionPeon = (turno == false) ? -1 : 1; // Dirección de avance del peón según el turno
+    bool inicio = (filaOrigen == (turno ? 1 : 6));// Indica si el peón está en su fila inicial para permitir mover 2 casillas
 
     if (diferenciaFila == direccionPeon && diferenciaColumna == 0 && destino == '*') {
         movimientoValido = true;  // 1 casilla
@@ -15,10 +15,13 @@ void MovimientoPeon(char tablero[FILA][COLUMNA], int filaOrigen, int colOrigen, 
         tablero[filaOrigen + direccionPeon][colOrigen] == '*' && destino == '*') {
         movimientoValido = true;  // 2 casillas inicio
     }
+    // se mueve 1 posición hacia adelante y otra de lado
     if (diferenciaFila == direccionPeon && (diferenciaColumna == 1 || diferenciaColumna == -1)) {
+        //Turno Mayus
         if (turno && (destino == 'p' || destino == 't' || destino == 'h' || destino == 'b' || destino == 'q' || destino == 'k')) {
             movimientoValido = true;  // Captura abajo
         }
+        //Turno Minus
         if (!turno && (destino == 'P' || destino == 'T' || destino == 'H' || destino == 'B' || destino == 'Q' || destino == 'K')) {
             movimientoValido = true;  // Captura arriba
         }
@@ -26,12 +29,14 @@ void MovimientoPeon(char tablero[FILA][COLUMNA], int filaOrigen, int colOrigen, 
 }
 
 void MovimientoTorre(char tablero[FILA][COLUMNA], int filaOrigen, int colOrigen, int filaDestino, int colDestino, bool turno, bool& movimientoValido) {
-    bool rutaLibre = true;
-    char destino = tablero[filaDestino][colDestino];
-    int diferenciaFila = filaDestino - filaOrigen;
-    int diferenciaColumna = colDestino - colOrigen;
+    bool rutaLibre = true; // Indica si no hay piezas entre origen y destino
+    char destino = tablero[filaDestino][colDestino]; // Contenido de la casilla destino
+    int diferenciaFila = filaDestino - filaOrigen; // Desplazamiento vertical
+    int diferenciaColumna = colDestino - colOrigen; // Desplazamiento horizontal
+
+    // La torre solo se puede mover en línea recta si es la misma fila o la misma columna
     if (!(diferenciaFila == 0 || diferenciaColumna == 0)) {
-        rutaLibre = false;
+        rutaLibre = false; // movimiento no válido
     }
     else {
         int pasoFila = 0, pasoColumna = 0;
@@ -71,7 +76,7 @@ void MovimientoTorre(char tablero[FILA][COLUMNA], int filaOrigen, int colOrigen,
 }
 
 void MovimientoAlfil(char tablero[FILA][COLUMNA], int filaOrigen, int colOrigen, int filaDestino, int colDestino, bool turno, bool& movimientoValido) {
-    bool caminoLibre = true;
+    bool caminoLibre = true; 
     char destino = tablero[filaDestino][colDestino];
     int diferenciaFila = filaDestino - filaOrigen;
     int diferenciaColumna = colDestino - colOrigen;

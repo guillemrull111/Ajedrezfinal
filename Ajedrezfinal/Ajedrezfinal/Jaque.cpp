@@ -12,13 +12,13 @@ void BuscarRey(char tablero[FILA][COLUMNA], char rey, int& fila, int& col) { //F
     }
 }
 
-void ComprobarJaque(char tablero[FILA][COLUMNA], bool turno, bool& enJaque) {
+void ComprobarJaque(char tablero[FILA][COLUMNA], bool turno, bool& enJaque) { // Comprueba si el jugador está en jaque
 
     enJaque = false; // por defecto, no hay jaque
-    int filaRey, colRey;
-    bool movimientoValido;
+    int filaRey, colRey;  // Posición del rey del jugador actual
+    bool movimientoValido; // Indica si una pieza rival puede atacar al rey
 
-    // Determinar qué rey buscamos
+    //'K' si es turno de blancas , 'k' si es turno de negras
     char rey = turno ? 'K' : 'k';
 
     // Buscar la posición del rey
@@ -28,14 +28,15 @@ void ComprobarJaque(char tablero[FILA][COLUMNA], bool turno, bool& enJaque) {
     for (int i = 0; i < FILA; i++) {
         for (int j = 0; j < COLUMNA; j++) {
 
-            char ficha = tablero[i][j];
-            movimientoValido = false;
+            char ficha = tablero[i][j]; // Ficha actual
+            movimientoValido = false; // Ponemos en false para evitar errores
 
-            // Si turno de blancas, comprobamos fichas negras
+            // Si és turno de blancas comprobamos si las fichas negras pueden atacar a nuestro rey
             if (turno &&
                 (ficha == 'p' || ficha == 't' || ficha == 'b' ||
                     ficha == 'h' || ficha == 'q' || ficha == 'k')) {
 
+                // Probamos el movimiento de todas las piezas
                 if (ficha == 'p')
                     MovimientoPeon(tablero, i, j, filaRey, colRey, false, movimientoValido);
                 else if (ficha == 't')
@@ -49,17 +50,19 @@ void ComprobarJaque(char tablero[FILA][COLUMNA], bool turno, bool& enJaque) {
                 else if (ficha == 'k')
                     MovimientoRey(tablero, i, j, filaRey, colRey, false, movimientoValido);
 
+                // Si alguna pieza tiene un movimiento válido hacia la posición del rey hay jaque
                 if (movimientoValido) {
                     enJaque = true;
-                    return; // jaque detectado
+                    return; // Una vez ya hemos encontrado el jaque no hace falta seguir comprobando
                 }
             }
 
-            // Si turno de negras, comprobamos fichas blancas
+            // Si és turno de negras comprobamos si las fichas blancas pueden atacar a nuestro rey
             if (!turno &&
                 (ficha == 'P' || ficha == 'T' || ficha == 'B' ||
                     ficha == 'H' || ficha == 'Q' || ficha == 'K')) {
 
+                // Probamos el movimiento de todas las piezas
                 if (ficha == 'P')
                     MovimientoPeon(tablero, i, j, filaRey, colRey, true, movimientoValido);
                 else if (ficha == 'T')
@@ -73,34 +76,35 @@ void ComprobarJaque(char tablero[FILA][COLUMNA], bool turno, bool& enJaque) {
                 else if (ficha == 'K')
                     MovimientoRey(tablero, i, j, filaRey, colRey, true, movimientoValido);
 
+                // Si alguna pieza tiene un movimiento válido hacia la posición del rey hay jaque
                 if (movimientoValido) {
                     enJaque = true;
-                    return; // jaque detectado
+                    return; // Una vez ya hemos encontrado el jaque no hace falta seguir comprobando
                 }
             }
         }
     }
 }
 
-void ComprobarJaqueYMate(char tablero[FILA][COLUMNA], bool turno, bool& enJaque, bool& jaqueMate) {
+void ComprobarJaqueYMate(char tablero[FILA][COLUMNA], bool turno, bool& enJaque, bool& jaqueMate) { // Comprueba si el jugador está en jaque mate
 
-    enJaque = false;
-    jaqueMate = false;
-    bool movimientoValido;
+    enJaque = false; // Por defecto no hay jaque
+    jaqueMate = false; // Por defecto no hay jaque mate
+    bool movimientoValido; 
 
-    // 1 Comprobar jaque en la posición actual usando la función independiente
+    // Comprueba si el jugador está en jaque
     ComprobarJaque(tablero, turno, enJaque);
 
     if (!enJaque)
-        return; // si no hay jaque → no puede haber jaque mate
+        return; // si no hay jaque no hay jaque mate
 
-    // 2 Simular todos los movimientos posibles del jugador en jaque
+    // Simula los movimientos que puede hacer el jugador en jaque
     for (int i = 0; i < FILA; i++) {
         for (int j = 0; j < COLUMNA; j++) {
 
             char ficha = tablero[i][j];
 
-            // Solo piezas del jugador en jaque
+            // Solo piezas del jugador que esta en jaque
             if ((turno &&
                 (ficha == 'P' || ficha == 'T' || ficha == 'B' ||
                     ficha == 'H' || ficha == 'Q' || ficha == 'K')) ||
@@ -109,13 +113,13 @@ void ComprobarJaqueYMate(char tablero[FILA][COLUMNA], bool turno, bool& enJaque,
                     (ficha == 'p' || ficha == 't' || ficha == 'b' ||
                         ficha == 'h' || ficha == 'q' || ficha == 'k'))) {
 
-                // Recorrer todas las casillas como posibles destinos
+                // Recorremos todas las casillas como posibles destinos
                 for (int filaDestino = 0; filaDestino < FILA; filaDestino++) {
                     for (int colDestino = 0; colDestino < COLUMNA; colDestino++) {
 
-                        movimientoValido = false;
+                        movimientoValido = false; // Se resetea para cada movimiento
 
-                        // Comprobar si la pieza puede moverse a (filaDestino, colDestino)
+                        // Comprobamos si la pieza puede moverse a (filaDestino, colDestino)
                         if (ficha == 'P' || ficha == 'p')
                             MovimientoPeon(tablero, i, j, filaDestino, colDestino, turno, movimientoValido);
                         else if (ficha == 'T' || ficha == 't')
@@ -129,31 +133,32 @@ void ComprobarJaqueYMate(char tablero[FILA][COLUMNA], bool turno, bool& enJaque,
                         else if (ficha == 'K' || ficha == 'k')
                             MovimientoRey(tablero, i, j, filaDestino, colDestino, turno, movimientoValido);
 
+                        // Si no es un movimiento válido lo ignoramos
                         if (!movimientoValido)
-                            continue; // si no es un movimiento válido, ignorar
+                            continue; // Pasa a comprobar la siguiente posición
 
-                        // 3 Simular el movimiento en el tablero
+                        // Simula los movimientos que puede hacer el jugador en jaque en el tablero
                         char origen = tablero[i][j];
                         char destino = tablero[filaDestino][colDestino];
                         tablero[filaDestino][colDestino] = origen;
                         tablero[i][j] = '*';
 
-                        // 4 Comprobar si el rey sigue en jaque
+                        // Comprobamos si el rey sigue en jaque
                         bool sigueEnJaque;
                         ComprobarJaque(tablero, turno, sigueEnJaque);
 
-                        // 5 Deshacer movimiento
+                        // Volvemos a poner las piezas donde estaban
                         tablero[i][j] = origen;
                         tablero[filaDestino][colDestino] = destino;
 
                         if (!sigueEnJaque)
-                            return; // el rey puede salvarse → no es jaque mate
+                            return; // Si el rey ya no esta en jaque no és jaque mate
                     }
                 }
             }
         }
     }
 
-    // 6 Si llegamos aquí → no hay movimiento que salve al rey → JAQUE MATE
+    // Si sigue en jaque, no hay ningún movimiento que pueda dejar al rey fura de jaque, por lo que es jaque mate
     jaqueMate = true;
 }

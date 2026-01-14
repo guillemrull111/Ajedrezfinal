@@ -1,5 +1,7 @@
 ﻿#include <iostream>
 #include <cstdlib>  
+#include <chrono> // Herramientas de tiempo
+#include <thread>  // sleep_for
 #include "Const.h"
 #include "tablero.h"
 #include "Movimiento.h"
@@ -28,15 +30,16 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
         }
 
         // Comprobación de que el origen está dentro del tablero
-        if (filaOrigen < 1 || filaOrigen > 8 || colOrigen < 1 || colOrigen > 8) {
-            std::cout << "Fuera del tablero\n";
+        if (filaOrigen < 1 || filaOrigen > FILA || colOrigen < 1 || colOrigen > COLUMNA) {
+            std::cout << "Posicion fuera del tablero, escoje otra vez las coordenadas\n";
+            std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_RATE)); // Pequeña pausa para que el jugador pueda leer el mensaje
             system("cls");
             ImprimirTablero(tablero);
             continue; // Pide otra vez coordenadas
         }
 
         // Conversión de coordenadas
-        filaOrigen = 8 - filaOrigen;
+        filaOrigen = FILA - filaOrigen;
         colOrigen = colOrigen - 1;
 
         char ficha = tablero[filaOrigen][colOrigen]; // Ficha en la casilla de origen
@@ -61,15 +64,16 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
             std::cin >> colDestino;
 
             // Comprobar que el destino está dentro del tablero
-            if (filaDestino < 1 || filaDestino > 8 || colDestino < 1 || colDestino > 8) {
-                std::cout << "Destino fuera del tablero\n";
+            if (filaDestino < 1 || filaDestino > FILA || colDestino < 1 || colDestino > COLUMNA) {
+                std::cout << "Destino fuera del tablero, escoje otra vez las coordenadas\n";
+                std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_RATE)); // Pequeña pausa para que el jugador pueda leer el mensaje
                 system("cls");
                 ImprimirTablero(tablero);
                 continue; // Pide otra vez coordenadas
             }
 
             // Conversión de coordenadas
-            filaDestino = 8 - filaDestino;
+            filaDestino = FILA - filaDestino;
             colDestino = colDestino - 1;
 
             // Indica si el movimiento es valido
@@ -130,15 +134,18 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
                 }
 
                 turno = !turno;  // Cambiar turno al otro jugador
-                std::cout << "Movimiento correcto\n";
+                std::cout << "Movimiento correcto, cambio de turno\n";
+                std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_RATE)); // Pequeña pausa para que el jugador pueda leer el mensaje
             }
             else {
                 std::cout << "Movimiento inválido\n";  // Movimiento no válido
+                std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_RATE)); // Pequeña pausa para que el jugador pueda leer el mensaje
             }
 
         }
         else {
             std::cout << "No es tu ficha o posición vacía\n";  // Intento de mover ficha vacía o del rival
+            std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_RATE)); // Pequeña pausa para que el jugador pueda leer el mensaje
         }
 
         system("cls"); //Limpia la pantalla
