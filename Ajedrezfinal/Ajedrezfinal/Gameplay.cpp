@@ -110,10 +110,34 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
                 MovimientoReina(tablero, filaOrigen, colOrigen, filaDestino, colDestino, turno, movimientoValido);
 
             }
+                if (movimientoValido) {
+                    char origen = ficha;
+                    char destinoOriginal = tablero[filaDestino][colDestino];
 
+                    // Simular movimiento
+                    tablero[filaDestino][colDestino] = origen;
+                    tablero[filaOrigen][colOrigen] = '*';
+
+                    bool sigueEnJaquePropio = false;
+                    // Comprobar si, tras mover, MI rey está en jaque 
+                    ComprobarJaque(tablero, turno, sigueEnJaquePropio);
+
+                    // Deshacer simulación
+                    tablero[filaOrigen][colOrigen] = origen;
+                    tablero[filaDestino][colDestino] = destinoOriginal;
+
+                    if (sigueEnJaquePropio) {
+                     //   std::cout << "Movimiento ilegal: tu rey quedaría en jaque.\n";
+                        movimientoValido = false;
+                    }
+                }
+            
             if (movimientoValido) { // Si el movimiento es valido
                 tablero[filaDestino][colDestino] = ficha; // Movemos la ficha al destino
                 tablero[filaOrigen][colOrigen] = '*'; // Vaciamps la casilla de origen
+
+                system("cls"); //Limpia la pantalla
+                ImprimirTablero(tablero); //Muestra el tablero actualizado
 
                 // Conversión de peón a reina
                 if (ficha == 'P' && filaDestino == 7) // Peón blanco llega al final
@@ -125,11 +149,16 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
                 // Comprobar si el movimiento deja al rival en jaque/jaque mate
                 ComprobarJaqueYMate(tablero, !turno, enJaque, jaqueMate);
                 if (enJaque) {
-                    std::cout << "¡Jaque al rey! Estás obligado a mover el rey.\n";
-                    system("pause");
+                    if (!jaqueMate)
+                    {
+                        std::cout << "¡Jaque al rey!\n";
+                        std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_RATE));// Pequeña pausa para que el jugador pueda leer el mensaje
+                    }
                 }
+
                 if (jaqueMate) {
-                    std::cout << "¡¡Jaque mate!!\n";
+                    std::cout << "¡Jaque mate!\n";
+                    std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_RATE));// Pequeña pausa para que el jugador pueda leer el mensaje
                     juegoAcabado = true; // Termina la partida
                 }
 
@@ -148,7 +177,7 @@ void MovimientoFichas(char tablero[FILA][COLUMNA]) {
             std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_RATE)); // Pequeña pausa para que el jugador pueda leer el mensaje
         }
 
-        system("cls"); //Limpia la pantalla
-        ImprimirTablero(tablero); //Muestra el tablero actualizado
+       system("cls"); //Limpia la pantalla
+       ImprimirTablero(tablero); //Muestra el tablero actualizado
     }
 }
